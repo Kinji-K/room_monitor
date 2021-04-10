@@ -73,23 +73,39 @@ $payload = [
 	"text" => $message
 ];
 
-# send to slack
-if ($message !== ""){
-	$ch = curl_init();
-	$options = array(
-		CURLOPT_URL => $url,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_POST => true,
-		CURLOPT_POSTFIELDS => http_build_query(array(
-			'payload' => json_encode($payload)
-		))
-	);
-	curl_setopt_array($ch, $options);
-	curl_exec($ch);
-	curl_close($ch);
+# check in house or not
+$IP = "192.168.179.11";
+$port = "5555";
+$check_url = $IP . ":" . $port . "/get";
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $check_url);
+curl_setopt($ch, CURLOPT_HEADER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+$check = curl_exec($ch);
+
+if (strpos($check,"0") !== false){
+
+	# send to slack
+	if ($message !== ""){
+		$ch = curl_init();
+		$options = array(
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => http_build_query(array(
+				'payload' => json_encode($payload)
+			))
+		);
+		curl_setopt_array($ch, $options);
+		curl_exec($ch);
+		curl_close($ch);
+	}
 }
 
-echo "hello";
+echo $check;
 
 ?>
