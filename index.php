@@ -59,12 +59,12 @@ if ($humid == "" || $temp == "" || $abs_hum == "" || $CO2 == "" || $baro == "") 
 # alart for humidity
 if ($abs_hum > 15){
 	$message = $message . "部屋の湿度が高いです。\n絶対湿度は" . $abs_hum . "です。\n";
-} elseif ($abs_hum < 5){
+} elseif ($abs_hum < 4){
 	$message = $message . "部屋が乾燥しています。\n絶対湿度は" . $abs_hum . "です。\n";
 }
 
 # alart for CO2 density
-if ($CO2 > 1500){
+if ($CO2 > 2000){
 	$message = $message . "部屋の二酸化炭素濃度が高いです。換気してください。\n二酸化炭素濃度は" . $CO2 . "ppmです。\n";
 }
 
