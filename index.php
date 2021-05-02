@@ -77,6 +77,7 @@ $payload = [
 $IP = "192.168.179.11";
 $port = "5555";
 $check_url = $IP . ":" . $port . "/get";
+$check_sleep_url = $IP . ":" . $port . "/sleep_check";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $check_url);
@@ -86,7 +87,15 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 $check = curl_exec($ch);
 
-if (strpos($check,"0") !== false){
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $check_sleep_url);
+curl_setopt($ch, CURLOPT_HEADER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+$sleep_check = curl_exec($ch);
+
+if (strpos($check,"0") !== false and strpos($sleep_check,"0") !== false){
 
 	# send to slack
 	if ($message !== ""){
